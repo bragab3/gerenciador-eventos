@@ -49,6 +49,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Únicos serviços públicos: login e cadastro de administrador (primeiro acesso)
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/cadastro").permitAll()
+                        // Verificação de disponibilidade (usada para "acordar" a API antes do login)
+                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
                         // Documentação (a UI do Swagger usa o botão "Authorize" para chamar os endpoints protegidos)
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/error").permitAll()

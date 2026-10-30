@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { mensagemDeErro } from '../api.js';
 
 const LIMITE_IMAGEM_BYTES = 1.5 * 1024 * 1024;
+// O card mostra a imagem pequena; 1024 px de largura/altura já é mais que suficiente.
+const LADO_MAXIMO_PX = 1024;
 
 function lerComoDataUrl(arquivo) {
   return new Promise((resolve, reject) => {
@@ -10,6 +12,31 @@ function lerComoDataUrl(arquivo) {
     leitor.onerror = () => reject(new Error('Falha ao ler o arquivo.'));
     leitor.readAsDataURL(arquivo);
   });
+}
+
+// Reduz e recomprime a imagem (JPEG 80%) antes de enviar. A imagem vai em Base64 dentro do JSON
+// e volta em toda listagem de eventos, então uma foto de 1,5 MB deixava a Home pesada.
+// Se algo falhar (ex.: formato que o navegador não desenha), usa o arquivo original.
+async function comprimirImagem(arquivo) {
+  const original = await lerComoDataUrl(arquivo);
+  if (arquivo.type === 'image/gif' || arquivo.type === 'image/svg+xml') return original;
+  try {
+    const img = new Image();
+    img.src = original;
+    await img.decode();
+    const escala = Math.min(1, LADO_MAXIMO_PX / Math.max(img.width, img.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(img.width * escala);
+    canvas.height = Math.round(img.height * escala);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff'; // PNG transparente vira fundo branco no JPEG
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const comprimida = canvas.toDataURL('image/jpeg', 0.8);
+    return comprimida.length < original.length ? comprimida : original;
+  } catch {
+    return original;
+  }
 }
 
 // modo "criar": nome, data, localização e imagem (URL ou arquivo)
@@ -50,7 +77,7 @@ export default function EventoModal({ modo, evento, onSalvar, onFechar }) {
 
     try {
       setErro('');
-      setImagem(await lerComoDataUrl(arquivo));
+      setImagem(await comprimirImagem(arquivo));
     } catch (err) {
       setErro(err.message);
     }

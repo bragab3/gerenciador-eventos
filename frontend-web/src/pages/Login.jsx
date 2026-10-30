@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthApi, mensagemDeErro } from '../api.js';
 import { getCredenciais, limparCredenciais, salvarCredenciais, salvarSessao } from '../auth.js';
@@ -11,6 +11,17 @@ export default function Login() {
   const [gravarSenha, setGravarSenha] = useState(Boolean(salvas));
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(false);
+  const [demorando, setDemorando] = useState(false);
+
+  // Se o login passar de 5 s, provavelmente o servidor gratuito está "acordando": avisamos a pessoa.
+  useEffect(() => {
+    if (!carregando) {
+      setDemorando(false);
+      return undefined;
+    }
+    const timer = setTimeout(() => setDemorando(true), 5000);
+    return () => clearTimeout(timer);
+  }, [carregando]);
 
   async function entrar(evento) {
     evento.preventDefault();
@@ -85,6 +96,11 @@ export default function Login() {
           <button type="submit" className="btn btn-primario" disabled={carregando}>
             {carregando ? 'Entrando...' : 'Entrar'}
           </button>
+          {demorando && (
+            <p className="subtitulo" role="status">
+              O servidor está iniciando, isso pode levar até um minuto no primeiro acesso...
+            </p>
+          )}
           <button type="button" className="btn btn-secundario" onClick={() => navigate('/cadastro')}>
             Cadastrar-se
           </button>

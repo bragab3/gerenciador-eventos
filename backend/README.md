@@ -32,7 +32,7 @@ config/      → segurança, CORS e OpenAPI
 ```
 
 Fluxo de uma requisição autenticada: `JwtAuthenticationFilter` valida o token e define o usuário no
-`SecurityContext` → controller → service (confere se o recurso pertence ao administrador do token) →
+`SecurityContext` a partir das claims do token (sem consultar o banco) → controller → service (confere se o recurso pertence ao administrador do token) →
 repository. Erros em qualquer camada são convertidos em `ErroResponse` pelo `GlobalExceptionHandler`.
 
 ## Endpoints
@@ -45,6 +45,7 @@ repository. Erros em qualquer camada são convertidos em `ErroResponse` pelo `Gl
 | POST   | `/api/eventos`            | JWT  | Cadastra evento                             |
 | PATCH  | `/api/eventos/{eventoId}` | JWT  | Atualiza `data` e/ou `localizacao`          |
 | DELETE | `/api/eventos/{eventoId}` | JWT  | Exclui evento                               |
+| GET    | `/api/health`             | não  | Verifica se a API está no ar                |
 
 ## Exemplo rápido (curl)
 
