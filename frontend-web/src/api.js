@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { getSessao, limparSessao } from './auth.js';
 
+// Limpa qualquer colchete ou aspa acidental vinda de variáveis de ambiente da Vercel
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const cleanUrl = rawUrl.replace(/[\[\]"]/g, '').trim();
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+  baseURL: cleanUrl,
 });
 
 // Envia o JWT em todas as requisições: Authorization: Bearer <token>
