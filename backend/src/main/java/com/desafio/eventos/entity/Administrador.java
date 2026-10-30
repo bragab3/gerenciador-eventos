@@ -12,6 +12,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Administrador do sistema (tabela {@code administradores}). Dono dos eventos que cadastra.
+ * Nunca é serializado diretamente nas respostas: ver {@code AdministradorResponse}.
+ */
 @Entity
 @Table(name = "administradores")
 @Getter
@@ -31,7 +35,7 @@ public class Administrador {
     @Column(nullable = false, unique = true, length = 160)
     private String email;
 
-    /** Hash BCrypt da senha. */
+    /** Hash BCrypt da senha; a senha em texto puro nunca é persistida. */
     @Column(nullable = false)
     private String senha;
 }

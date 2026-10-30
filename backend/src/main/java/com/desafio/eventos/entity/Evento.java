@@ -17,6 +17,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Evento cadastrado por um administrador (tabela {@code eventos}).
+ */
 @Entity
 @Table(name = "eventos")
 @Getter
@@ -43,6 +46,7 @@ public class Evento {
     @Column(columnDefinition = "TEXT")
     private String imagem;
 
+    // N eventos para 1 administrador; LAZY evita carregar o administrador quando não é necessário
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "administrador_id", nullable = false)
     private Administrador administrador;

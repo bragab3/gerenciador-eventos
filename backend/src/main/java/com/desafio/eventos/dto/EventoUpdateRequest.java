@@ -5,6 +5,10 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+/**
+ * Corpo de {@code PATCH /api/eventos/{eventoId}}. Ambos os campos são opcionais, mas ao menos
+ * um deve ser informado (validado no {@code EventoService}).
+ */
 @Schema(description = "Atualização parcial: informe data, localizacao ou ambos")
 public record EventoUpdateRequest(
         @Schema(description = "Nova data (yyyy-MM-dd)", example = "2026-12-20")

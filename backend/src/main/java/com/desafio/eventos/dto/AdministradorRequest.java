@@ -5,6 +5,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Corpo de {@code POST /api/auth/cadastro}. Validado com Bean Validation antes de chegar ao service;
+ * o limite de 72 caracteres da senha corresponde ao máximo considerado pelo BCrypt.
+ */
 public record AdministradorRequest(
         @Schema(example = "Maria Silva")
         @NotBlank(message = "O nome é obrigatório")

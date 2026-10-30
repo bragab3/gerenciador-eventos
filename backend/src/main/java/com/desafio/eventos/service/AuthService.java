@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
+/**
+ * Cadastro de administradores e autenticação por email e senha.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -45,6 +48,10 @@ public class AuthService {
         return AdministradorResponse.from(administradorRepository.save(administrador));
     }
 
+    /**
+     * Autentica via {@link AuthenticationManager} (que compara a senha com o hash BCrypt)
+     * e emite um JWT. Credenciais inválidas lançam {@code BadCredentialsException} (HTTP 401).
+     */
     public LoginResponse login(LoginRequest request) {
         String email = normalizarEmail(request.email());
 

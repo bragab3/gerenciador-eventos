@@ -25,6 +25,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Configuração do Spring Security: API stateless autenticada por JWT.
+ *
+ * <p>Rotas públicas: login, cadastro, Swagger e {@code /error}. Demais rotas exigem token válido.
+ * CSRF fica desabilitado porque a autenticação usa header {@code Authorization}, não cookies.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -50,6 +56,7 @@ public class SecurityConfig {
                 .exceptionHandling(erros -> erros
                         .authenticationEntryPoint(securityErrorHandler)
                         .accessDeniedHandler(securityErrorHandler))
+                // Valida o JWT antes do filtro padrão de autenticação do Spring
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -65,6 +72,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    /** CORS para o frontend web, hospedado em outro domínio. */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

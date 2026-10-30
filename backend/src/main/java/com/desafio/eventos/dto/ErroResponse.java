@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Corpo de erro único da API, usado tanto pelo {@code GlobalExceptionHandler} quanto pelos
+ * erros de segurança (401/403). Os clientes exibem {@code mensagem} ou {@code detalhes}.
+ */
 @Schema(description = "Formato padrão de erro da API")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ErroResponse(

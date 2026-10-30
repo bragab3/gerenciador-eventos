@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Endpoints públicos de autenticação: login (emite o JWT) e cadastro de administrador.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
