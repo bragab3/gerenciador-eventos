@@ -20,6 +20,21 @@ Swagger UI: http://localhost:8080/swagger-ui.html
 Variáveis de ambiente opcionais: `DB_URL`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET` (Base64, mín. 256 bits),
 `JWT_EXPIRATION_MS`, `CORS_ALLOWED_ORIGINS`.
 
+## Arquitetura
+
+```
+controller/  → endpoints REST e validação de entrada (DTOs em dto/)
+service/     → regras de negócio e verificação de propriedade dos eventos
+repository/  → persistência (Spring Data JPA, entidades em entity/)
+security/    → filtro e serviço JWT, integração com o Spring Security
+exception/   → exceções de domínio e handler global (formato único de erro)
+config/      → segurança, CORS e OpenAPI
+```
+
+Fluxo de uma requisição autenticada: `JwtAuthenticationFilter` valida o token e define o usuário no
+`SecurityContext` → controller → service (confere se o recurso pertence ao administrador do token) →
+repository. Erros em qualquer camada são convertidos em `ErroResponse` pelo `GlobalExceptionHandler`.
+
 ## Endpoints
 
 | Método | Rota                      | Auth | Descrição                                   |

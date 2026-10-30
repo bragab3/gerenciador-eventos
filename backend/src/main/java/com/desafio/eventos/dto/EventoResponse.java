@@ -4,6 +4,9 @@ import com.desafio.eventos.entity.Evento;
 
 import java.time.LocalDate;
 
+/**
+ * Representação de um evento nas respostas da API.
+ */
 public record EventoResponse(
         Long id,
         String nome,

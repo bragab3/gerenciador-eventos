@@ -16,6 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Regras de negócio dos eventos.
+ *
+ * <p>Todas as operações recebem o id do administrador autenticado (extraído do JWT) e garantem
+ * que ele só acesse os próprios eventos: tentativa de acesso a eventos de outro administrador
+ * resulta em HTTP 403.
+ */
 @Service
 @RequiredArgsConstructor
 public class EventoService {
@@ -78,6 +85,7 @@ public class EventoService {
         eventoRepository.delete(evento);
     }
 
+    /** Busca o evento e valida a propriedade: inexistente → 404, de outro administrador → 403. */
     private Evento buscarEventoDoAdministrador(Long eventoId, Long adminAutenticadoId) {
         Evento evento = eventoRepository.findById(eventoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Evento não encontrado: " + eventoId));

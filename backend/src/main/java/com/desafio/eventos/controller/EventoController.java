@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * CRUD de eventos. Todas as rotas exigem JWT; o administrador autenticado é injetado via
+ * {@link AuthenticationPrincipal} e repassado ao service para a verificação de propriedade.
+ */
 @RestController
 @RequestMapping("/api/eventos")
 @RequiredArgsConstructor
