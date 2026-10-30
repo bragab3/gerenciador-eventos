@@ -36,12 +36,18 @@ public class JwtService {
     }
 
     /**
-     * Valida assinatura e expiração e devolve o email (subject) do token.
+     * Valida o token e monta o usuário autenticado direto das claims (id, nome e email),
+     * sem consultar o banco a cada requisição.
      *
      * @throws JwtException se o token for inválido, adulterado ou estiver expirado
      */
-    public String extrairEmail(String token) {
-        return lerClaims(token).getSubject();
+    public AdminPrincipal extrairAdmin(String token) {
+        Claims claims = lerClaims(token);
+        Long adminId = claims.get("adminId", Long.class);
+        if (adminId == null || claims.getSubject() == null) {
+            throw new JwtException("Token sem as claims esperadas.");
+        }
+        return new AdminPrincipal(adminId, claims.get("nome", String.class), claims.getSubject(), null);
     }
 
     private Claims lerClaims(String token) {

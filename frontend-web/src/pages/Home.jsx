@@ -5,6 +5,11 @@ import { getSessao, limparSessao } from '../auth.js';
 import EventoCard from '../components/EventoCard.jsx';
 import EventoModal from '../components/EventoModal.jsx';
 
+// Mesma ordem da API (data crescente). Datas "yyyy-MM-dd" ordenam corretamente como texto.
+function ordenarPorData(eventos) {
+  return [...eventos].sort((a, b) => a.data.localeCompare(b.data));
+}
+
 export default function Home() {
   const navigate = useNavigate();
   const sessao = getSessao();
@@ -32,17 +37,20 @@ export default function Home() {
   }, [carregar]);
 
   // Chamada pelo modal. Se lançar erro, o modal mostra a mensagem e continua aberto.
+  // A API já devolve o evento salvo, então atualizamos a lista localmente em vez de
+  // buscar todos os eventos de novo (economiza uma ida ao servidor a cada salvamento).
   async function salvar(dados) {
     if (modal.modo === 'editar') {
-      await EventosApi.atualizar(modal.evento.id, {
+      const atualizado = await EventosApi.atualizar(modal.evento.id, {
         data: dados.data,
         localizacao: dados.localizacao,
       });
+      setEventos((atuais) => ordenarPorData(atuais.map((e) => (e.id === atualizado.id ? atualizado : e))));
     } else {
-      await EventosApi.criar({ ...dados, adminId });
+      const criado = await EventosApi.criar({ ...dados, adminId });
+      setEventos((atuais) => ordenarPorData([...atuais, criado]));
     }
     setModal(null);
-    await carregar();
   }
 
   async function excluir(evento) {

@@ -42,6 +42,13 @@ export function mensagemDeErro(erro) {
   return 'Ocorreu um erro inesperado. Tente novamente.';
 }
 
+// "Acorda" a API: a hospedagem gratuita desliga o backend depois de um tempo sem uso, e o
+// primeiro acesso pode levar dezenas de segundos. Disparamos esse ping assim que o site abre,
+// enquanto a pessoa ainda digita email e senha. Erros são ignorados de propósito.
+export function acordarServidor() {
+  api.get('/api/health').catch(() => {});
+}
+
 export const AuthApi = {
   login: (email, senha) => api.post('/api/auth/login', { email, senha }).then((r) => r.data),
   cadastrar: (dados) => api.post('/api/auth/cadastro', dados).then((r) => r.data),
