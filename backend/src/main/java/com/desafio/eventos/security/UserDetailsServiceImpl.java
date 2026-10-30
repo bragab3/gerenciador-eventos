@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Carrega o administrador pelo email para o Spring Security (login e validação do JWT).
+ * Carrega o administrador pelo email para o Spring Security durante o login.
  */
 @Service
 @RequiredArgsConstructor
