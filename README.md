@@ -56,14 +56,3 @@ Detalhes (URL da API em celular físico, testes, e2e) em `mobile/README.md`.
 ## Testes
 
 - `mobile`: `npm test` (83 testes) e `npm run e2e` (fluxo completo no navegador, aceita `E2E_BACKEND=real`).
-
-## Publicar no GitHub (repositório público)
-
-```bash
-git init -b main
-git add .
-git commit -m "Gerenciador de Eventos: backend, frontend web e app mobile"
-gh repo create gerenciador-eventos --public --source=. --push     # ou crie no site e use git remote add + git push
-```
-
-O `.gitignore` da raiz já exclui `node_modules`, `target`, `dist`, `.expo` e arquivos `.env`.
