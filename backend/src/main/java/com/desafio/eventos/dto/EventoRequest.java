@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+/**
+ * Corpo de {@code POST /api/eventos}. O {@code adminId} precisa ser o mesmo do token JWT.
+ */
 public record EventoRequest(
         @Schema(description = "Título do evento", example = "Feira de Tecnologia")
         @NotBlank(message = "O nome do evento é obrigatório")

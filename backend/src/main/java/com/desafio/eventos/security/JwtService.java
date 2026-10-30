@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+/**
+ * Emissão e validação de tokens JWT assinados com HMAC-SHA.
+ * O token carrega o email (subject), o {@code adminId} e o nome; a chave e a validade vêm de
+ * {@code app.jwt.secret} e {@code app.jwt.expiration-ms}.
+ */
 @Service
 public class JwtService {
 

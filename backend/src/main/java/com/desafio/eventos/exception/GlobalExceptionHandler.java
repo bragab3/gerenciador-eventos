@@ -17,6 +17,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.util.List;
 
+/**
+ * Converte exceções em respostas {@link ErroResponse} com o status HTTP adequado
+ * (400, 401, 403, 404, 409 e 500 como fallback).
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

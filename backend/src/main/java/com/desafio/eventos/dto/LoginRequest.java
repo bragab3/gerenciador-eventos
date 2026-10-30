@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Corpo de {@code POST /api/auth/login}.
+ */
 public record LoginRequest(
         @Schema(example = "maria@email.com")
         @NotBlank(message = "O email é obrigatório")
